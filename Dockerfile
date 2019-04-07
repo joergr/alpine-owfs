@@ -1,9 +1,7 @@
 # STEP 1 build owfs
-FROM multiarch/alpine:x86_64-edge as owfsbuilder
+FROM alpine:3.9 as owfsbuilder
 
-RUN echo "http://dl-3.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories; \
-    echo "http://dl-3.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories; \
-    apk update; \
+RUN apk update; \
     apk add alpine-keys; \
     apk add bash automake make git rsync tar python py-setuptools \
        gcc g++ binutils libgcc libstdc++ libgfortran \
@@ -24,8 +22,8 @@ COPY owfs.conf /etc/owfs.conf
 
 
 # start from scratch
-FROM gliderlabs/alpine:edge
-MAINTAINER Björn Engel<justcoke@gmail.com>
+FROM alpine:3.9
+MAINTAINER Jörg Ruwe<joru@gmail.com>
 
 COPY --from=owfsbuilder /opt/owfs /opt/owfs
 COPY owfs.conf /etc/owfs.conf
